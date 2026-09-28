@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topik 2 화이팅 Zumuu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+        }
+
+        /* ============ ANIMATED GRADIENT BACKGROUND ============ */
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            position: relative;
+            overflow-x: hidden;
+            background: linear-gradient(
+                -45deg,
+                #ffb3c6,
+                #ff8c94,
+                #ffb347,
+                #ffd966,
+                #a3d8f4,
+                #b5e8d5,
+                #d4b5f7
+            );
+            background-size: 500% 500%;
+            animation: gradientShift 25s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ============ BOKEH GLOW LIGHTS ============ */
+        .bokeh-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bokeh {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.55;
+            animation: floatBokeh 22s infinite ease-in-out alternate;
+        }
+        .bokeh:nth-child(1) { width: 280px; height: 280px; background: #ff9eb5; top: -60px; left: -60px; animation-duration: 26s; }
+        .bokeh:nth-child(2) { width: 320px; height: 320px; background: #ffd88a; bottom: -80px; right: -60px; animation-duration: 32s; animation-delay: -5s; }
+        .bokeh:nth-child(3) { width: 200px; height: 200px; background: #a3d8f4; top: 40%; left: 70%; animation-duration: 28s; animation-delay: -12s; }
+        .bokeh:nth-child(4) { width: 240px; height: 240px; background: #d4b5f7; bottom: 20%; left: 10%; animation-duration: 34s; animation-delay: -8s; }
+        .bokeh:nth-child(5) { width: 180px; height: 180px; background: #b5e8d5; top: 15%; left: 45%; animation-duration: 24s; animation-delay: -3s; }
+        @keyframes floatBokeh {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -50px) scale(1.2); }
+        }
+
+        /* ============ SVG TULIP GARDEN ============ */
+        .tulip-garden {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .tulip-svg {
+            position: absolute;
+            width: 90px;
+            height: 150px;
+            opacity: 0.9;
+            animation: swayTulip 6s infinite ease-in-out alternate;
+            filter: drop-shadow(0 10px 16px rgba(200, 60, 120, 0.35));
+        }
+        @keyframes swayTulip {
+            0%   { transform: rotate(-4deg) translateY(0); }
+            100% { transform: rotate(6deg) translateY(-12px); }
+        }
+        .tulip-svg:nth-child(1) { top: 6%;  left: 2%;  animation-duration: 7s; }
+        .tulip-svg:nth-child(2) { top: 68%; left: 90%; animation-duration: 8s; animation-delay: -2s; transform: scale(1.3); }
+        .tulip-svg:nth-child(3) { top: 42%; left: 8%;  animation-duration: 6.5s; animation-delay: -1s; transform: scale(0.85); }
+        .tulip-svg:nth-child(4) { top: 14%; left: 82%; animation-duration: 9s; animation-delay: -4s; transform: scale(1.1); }
+        .tulip-svg:nth-child(5) { top: 88%; left: 18%; animation-duration: 7.5s; animation-delay: -3s; transform: scale(1.2); }
+        .tulip-svg:nth-child(6) { top: 52%; left: 94%; animation-duration: 8.5s; animation-delay: -5s; transform: scale(0.9); }
+        .tulip-svg:nth-child(7) { top: 3%;  left: 48%; animation-duration: 6s; animation-delay: -1.5s; transform: scale(1.05); }
+        .tulip-svg:nth-child(8) { top: 92%; left: 62%; animation-duration: 9.5s; animation-delay: -6s; transform: scale(1.15); }
+        .tulip-svg:nth-child(9) { top: 30%; left: 32%; animation-duration: 7.2s; animation-delay: -2.5s; transform: scale(0.7); opacity: 0.7; }
+        .tulip-svg:nth-child(10){ top: 78%; left: 40%; animation-duration: 8.8s; animation-delay: -4.5s; transform: scale(0.95); }
+
+        /* ============ FLOATING PETALS ============ */
+        .petal {
+            position: fixed;
+            width: 14px; height: 14px;
+            background: radial-gradient(circle at 30% 30%, #ffd1e0, #ff8eb5);
+            border-radius: 50% 0 50% 50%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.7;
+            animation: fallPetal linear infinite;
+        }
+        @keyframes fallPetal {
+            0%   { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10%  { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ============ APP CONTAINER ============ */
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 780px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            border-radius: 52px 52px 44px 44px;
+            padding: 32px 30px 42px;
+            box-shadow:
+                0 40px 60px -20px rgba(180, 60, 100, 0.55),
+                0 0 0 1px rgba(255, 255, 255, 0.9) inset,
+                0 0 60px rgba(255, 180, 210, 0.4);
+            border: 1.5px solid rgba(255, 230, 240, 1);
+            animation: containerIn 0.8s ease;
+        }
+        @keyframes containerIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ============ TITLES ============ */
+        .main-title {
+            font-size: 2.6rem;
+            text-align: center;
+            background: linear-gradient(135deg, #c41e5e, #f06b8a, #f9a26c, #f7c35c, #d46be0, #6bb8f0);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 20px rgba(255, 180, 210, 0.7);
+            animation: titleShine 6s ease infinite;
+            letter-spacing: -0.03em;
+        }
+        @keyframes titleShine {
+            0%,100% { background-position: 0% 50%; }
+            50%     { background-position: 100% 50%; }
+        }
+        .subhead {
+            text-align: center;
+            font-size: 1rem;
+            color: #8a2b51;
+            background: linear-gradient(135deg, rgba(255,240,245,0.95), rgba(255,225,235,0.95));
+            padding: 10px 22px;
+            border-radius: 40px;
+            display: inline-block;
+            font-weight: 600;
+            box-shadow: 0 6px 16px rgba(255, 160, 190, 0.4), 0 0 0 2px rgba(255,255,255,0.8) inset;
+            border: 1px solid rgba(255, 200, 220, 0.9);
+        }
+
+        /* ============ SCREEN ============ */
+        .screen { display: none; animation: fadeSlide 0.4s ease; }
+        .screen.active { display: block; }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============ CATEGORY CARDS ============ */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin: 18px 0 10px;
+        }
+        .cat-card {
+            position: relative;
+            background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,245,250,0.9));
+            backdrop-filter: blur(10px);
+            padding: 24px 14px;
+            border-radius: 40px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #4a1d2e;
+            box-shadow:
+                0 16px 30px -12px rgba(200, 80, 130, 0.5),
+                0 0 0 2px rgba(255, 255, 255, 0.9) inset;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+            word-break: keep-all;
+            overflow: hidden;
+        }
+        .cat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,180,210,0.5) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+        .cat-card:hover::before { opacity: 1; }
+        .cat-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            background: linear-gradient(145deg, #fffafc, #fff0f6);
+            box-shadow:
+                0 26px 40px -12px #d4548a,
+                0 0 0 3px #ffd9e6 inset,
+                0 0 30px rgba(255, 150, 190, 0.5);
+        }
+        .cat-emoji {
+            font-size: 2.4rem;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 4px 8px rgba(255, 120, 170, 0.5));
+            transition: transform 0.4s;
+        }
+        .cat-card:hover .cat-emoji { transform: scale(1.2) rotate(-8deg); }
+
+        /* ============ LESSON LIST ============ */
+        .lesson-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 22px 0 8px;
+        }
+        .lesson-item {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,245,250,0.9));
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 16px 26px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #601a37;
+            box-shadow:
+                0 10px 22px -8px rgba(180, 70, 110, 0.4),
+                0 0 0 2px rgba(255, 240, 245, 1) inset;
+            border: 2px solid #ffe2ec;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+        .lesson-item::after {
+            content: '';
+            position: absolute;
+            right: 24px;
+            font-size: 1.4rem;
+            transition: transform 0.3s;
+        }
+        .lesson-item:hover {
+            background: linear-gradient(135deg, #fff5fa, #ffe8f2);
+            transform: translateX(10px) scale(1.02);
+            border-color: #ffb0c8;
+            box-shadow:
+                0 18px 30px -10px #d4548a,
+                0 0 0 3px #ffd9e6 inset;
+        }
+        .lesson-item:hover .tulip-icon { transform: rotate(-15deg) scale(1.2); }
+        .tulip-icon {
+            font-size: 1.9rem;
+            transition: transform 0.4s;
+            filter: drop-shadow(0 4px 6px rgba(220, 100, 140, 0.5));
+        }
+
+        /* ============ FLASHCARD ============ */
+        .flashcard-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            margin: 12px 0 18px;
+        }
+        .word-card {
+            position: relative;
+            background: linear-gradient(145deg, #ffffff 0%, #fff8fc 100%);
+            width: 100%;
+            border-radius: 64px;
+            padding: 52px 28px;
+            text-align: center;
+            box-shadow:
+                0 30px 45px -15px #d45c84,
+                0 12px 0 0 #ffe6f0 inset,
+                0 0 0 3px white,
+                0 0 60px rgba(255, 160, 200, 0.4);
+            border: 2px solid #ffb7d0;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+        .word-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, #ff8eb5, #ffb347, #ffd966, #a3d8f4, #d4b5f7);
+            background-size: 300% 100%;
+            animation: gradientBar 4s linear infinite;
+        }
+        @keyframes gradientBar {
+            0%   { background-position: 0% 0%; }
+            100% { background-position: 300% 0%; }
+        }
+        .korean-word {
+            font-size: 3.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #981b4b, #d44a78, #f06b8a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            margin-bottom: 18px;
+            letter-spacing: -0.02em;
+            filter: drop-shadow(0 2px 10px rgba(255, 160, 190, 0.6));
+        }
+        .pronunciation {
+            font-size: 1.6rem;
+            color: #b64b6e;
+            background: linear-gradient(135deg, #fff0f5, #ffe4ee);
+            display: inline-block;
+            padding: 8px 26px;
+            border-radius: 60px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            border: 1px solid #ffc1d4;
+            box-shadow: 0 4px 10px rgba(255, 160, 190, 0.3) inset;
+        }
+        .mongolian-meaning {
+            font-size: 2.1rem;
+            font-weight: 600;
+            color: #3d2b35;
+            background: linear-gradient(135deg, #fff7fb, #ffeeF5);
+            padding: 18px 12px;
+            border-radius: 44px;
+            border-left: 10px solid #ff8eb5;
+            border-right: 10px solid #ff8eb5;
+            box-shadow: 0 6px 14px rgba(255, 160, 200, 0.3) inset;
+        }
+        .progress-badge {
+            font-size: 1rem;
+            background: linear-gradient(135deg, #fde4ed, #ffd6e6);
+            padding: 8px 22px;
+            border-radius: 40px;
+            color: #8a2b51;
+            font-weight: 700;
+            margin-bottom: 6px;
+            box-shadow: 0 4px 10px rgba(255, 150, 190, 0.4);
+            display: inline-block;
+        }
+        .encouragement {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #c41e5e;
+            background: linear-gradient(135deg, #fff2f7, #ffe0ec);
+            padding: 14px 28px;
+            border-radius: 80px;
+            margin: 8px 0 10px;
+            display: inline-block;
+            box-shadow: 0 8px 20px rgba(255, 140, 180, 0.5);
+            border: 1.5px solid #ffc2d6;
+            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes popIn {
+            0%   { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ============ BUTTONS ============ */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .btn {
+            border: none;
+            background: linear-gradient(145deg, #ffffff, #fff5fa);
+            padding: 16px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow:
+                0 10px 20px -8px rgba(190, 70, 110, 0.45),
+                0 0 0 2px #ffe2ed inset;
+            border: 1.5px solid #ffc1d6;
+            color: #611f3a;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            flex: 1;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 16px 26px -8px rgba(190, 70, 110, 0.6),
+                0 0 0 3px #ffd0e0 inset;
+        }
+        .btn-primary {
+            background: linear-gradient(145deg, #ffa5c3, #ff7fa8, #f06b8a);
+            background-size: 200% 200%;
+            color: white;
+            box-shadow:
+                0 16px 24px -10px #d44a78,
+                0 0 0 2px #fff2f7 inset;
+            border: 1px solid #ffb7cf;
+            animation: btnShine 4s ease infinite;
+        }
+        @keyframes btnShine {
+            0%,100% { background-position: 0% 50%; }
+            50%     { background-position: 100% 50%; }
+        }
+        .btn-primary:hover {
+            background: linear-gradient(145deg, #ff8eb5, #f06b8a, #d44a78);
+            transform: translateY(-3px) scale(1.02);
+        }
+        .btn:disabled {
+            opacity: 0.45;
+            transform: none;
+            pointer-events: none;
+        }
+        .back-btn {
+            background: linear-gradient(145deg, #fff0f5, #ffe4ee);
+            box-shadow: 0 6px 14px rgba(255, 160, 190, 0.4);
+            border: 1.5px solid #ffb0c8;
+            flex: 0.4;
+            max-width: 160px;
+        }
+
+        /* ============ QUIZ ============ */
+        .quiz-question {
+            background: linear-gradient(145deg, #fff8fc, #fff0f6);
+            border-radius: 52px;
+            padding: 30px 22px;
+            margin: 18px 0 16px;
+            text-align: center;
+            border: 2px solid #ffb7d0;
+            box-shadow: 0 16px 30px -12px rgba(200, 80, 130, 0.4), 0 0 0 3px #fff6fa inset;
+        }
+        .quiz-korean {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a12252, #d44a78);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 18px 0;
+        }
+        .option-btn {
+            background: linear-gradient(145deg, #ffffff, #fff8fc);
+            border: 2px solid #ffd0e0;
+            border-radius: 44px;
+            padding: 20px 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #401e2d;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 6px 12px rgba(200, 100, 140, 0.15);
+        }
+        .option-btn:hover {
+            background: linear-gradient(145deg, #fff0f6, #ffe4ee);
+            border-color: #ff8eb5;
+            transform: translateY(-3px);
+        }
+        .option-btn.selected {
+            background: linear-gradient(145deg, #ffb8d2, #ff9ec3);
+            border-color: #b62b5e;
+            color: #3d0b1e;
+            box-shadow: 0 0 0 3px #ffccdd, 0 10px 18px -6px #d44a78;
+        }
+        .option-btn.correct {
+            background: linear-gradient(145deg, #b4e6c3, #8fd9a8);
+            border-color: #2b7a4b;
+            color: #1a3a25;
+            box-shadow: 0 0 0 3px #c8f0d6;
+        }
+        .option-btn.wrong {
+            background: linear-gradient(145deg, #fbc4c4, #f5a8a8);
+            border-color: #b33b3b;
+            color: #4d1a1a;
+            box-shadow: 0 0 0 3px #ffd6d6;
+        }
+        .quiz-result {
+            text-align: center;
+            padding: 36px 20px;
+            background: linear-gradient(145deg, #fff6fa, #ffeef6);
+            border-radius: 60px;
+            border: 2px solid #ffb0c8;
+            box-shadow: 0 20px 40px -14px rgba(200, 80, 130, 0.5), 0 0 0 3px #fff8fc inset;
+        }
+        .score-big {
+            font-size: 3.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b62b5e, #f06b8a, #f9a26c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .result-message {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 14px 0;
+            color: #5c1e38;
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #862d55;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============ BOKEH ============ -->
+<div class="bokeh-layer">
+    <div class="bokeh"></div>
+    <div class="bokeh"></div>
+    <div class="bokeh"></div>
+    <div class="bokeh"></div>
+    <div class="bokeh"></div>
+</div>
+
+<!-- ============ SVG TULIPS ============ -->
+<div class="tulip-garden" id="tulipGarden"></div>
+
+<!-- ============ PETALS (JS generates) ============ -->
+
+<div class="app-container" id="app">
+    <!-- HOME -->
+    <div id="homeScreen" class="screen active">
+        <h1 class="main-title">Topik 2 화이팅 Zumuu</h1>
+        <div style="text-align: center; margin-bottom: 6px;"><span class="subhead">🌸 · 7 бүлэг ·  🌷</span></div>
+        <div class="category-grid" id="categoryGrid"></div>
+    </div>
+
+    <!-- LESSON LIST -->
+    <div id="lessonListScreen" class="screen">
+        <button class="btn back-btn" style="margin-bottom: 16px; width: auto;" onclick="showHome()">← Буцах</button>
+        <h2 id="categoryTitle" style="color: #7a2849; margin-bottom: 6px; font-size: 1.9rem;"></h2>
+        <div class="lesson-list" id="lessonList"></div>
+    </div>
+
+    <!-- FLASHCARD -->
+    <div id="flashcardScreen" class="screen">
+        <button class="btn back-btn" style="margin-bottom: 10px; width: auto;" onclick="backToLessonList()">← Хичээлүүд</button>
+        <div style="text-align: center;">
+            <span class="progress-badge" id="progressBadge">1/10</span>
+        </div>
+        <div class="flashcard-area">
+            <div class="word-card">
+                <div class="korean-word" id="fcKorean">경험</div>
+                <div class="pronunciation" id="fcPron">кёнхом</div>
+                <div class="mongolian-meaning" id="fcMeaning">туршлага</div>
+            </div>
+            <div id="encouragementBox" class="encouragement" style="display: none;"></div>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" id="prevBtn" onclick="prevCard()">← Өмнөх</button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextCard()">Дараах →</button>
+        </div>
+        <div style="margin-top: 16px; text-align: center;">
+            <button class="btn btn-primary" id="quizStartBtn" onclick="startQuiz()">📝 Шалгалт эхлэх</button>
+        </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="quizScreen" class="screen">
+        <button class="btn back-btn" style="margin-bottom: 12px; width: auto;" onclick="backToFlashcardsFromQuiz()">← Сургалт руу</button>
+        <div id="quizContent"></div>
+    </div>
+</div>
+
+<script>
+    // ============ SVG TULIP TEMPLATES ============
+    const tulipSVGs = [
+        // Pink tulip
+        `<svg viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 175 Q45 130 48 90" stroke="#3a8a4a" stroke-width="5" fill="none"/>
+            <path d="M50 175 Q55 140 52 100" stroke="#4aa85a" stroke-width="3" fill="none" opacity="0.7"/>
+            <ellipse cx="30" cy="140" rx="14" ry="6" fill="#5ac06a" transform="rotate(-30 30 140)"/>
+            <ellipse cx="70" cy="155" rx="13" ry="6" fill="#5ac06a" transform="rotate(25 70 155)"/>
+            <path d="M50 90 Q25 70 30 40 Q35 20 50 25 Q65 20 70 40 Q75 70 50 90 Z" fill="#ff6b9d"/>
+            <path d="M50 90 Q30 75 33 50 Q37 32 50 35 Q63 32 67 50 Q70 75 50 90 Z" fill="#ff8eb5"/>
+            <path d="M50 88 Q38 78 40 58 Q43 44 50 46 Q57 44 60 58 Q62 78 50 88 Z" fill="#ffb3c6"/>
+            <circle cx="50" cy="42" r="4" fill="#ffd966" opacity="0.7"/>
+        </svg>`,
+        // Yellow tulip
+        `<svg viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 175 Q45 130 48 90" stroke="#3a8a4a" stroke-width="5" fill="none"/>
+            <ellipse cx="32" cy="145" rx="14" ry="6" fill="#5ac06a" transform="rotate(-30 32 145)"/>
+            <ellipse cx="68" cy="158" rx="13" ry="6" fill="#5ac06a" transform="rotate(25 68 158)"/>
+            <path d="M50 90 Q25 70 30 40 Q35 20 50 25 Q65 20 70 40 Q75 70 50 90 Z" fill="#ffb347"/>
+            <path d="M50 90 Q30 75 33 50 Q37 32 50 35 Q63 32 67 50 Q70 75 50 90 Z" fill="#ffc966"/>
+            <path d="M50 88 Q38 78 40 58 Q43 44 50 46 Q57 44 60 58 Q62 78 50 88 Z" fill="#ffd966"/>
+            <circle cx="50" cy="42" r="4" fill="#ff8eb5" opacity="0.6"/>
+        </svg>`,
+        // Purple tulip
+        `<svg viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 175 Q45 130 48 90" stroke="#3a8a4a" stroke-width="5" fill="none"/>
+            <ellipse cx="30" cy="140" rx="14" ry="6" fill="#5ac06a" transform="rotate(-30 30 140)"/>
+            <path d="M50 90 Q25 70 30 40 Q35 20 50 25 Q65 20 70 40 Q75 70 50 90 Z" fill="#b57edc"/>
+            <path d="M50 90 Q30 75 33 50 Q37 32 50 35 Q63 32 67 50 Q70 75 50 90 Z" fill="#c99be8"/>
+            <path d="M50 88 Q38 78 40 58 Q43 44 50 46 Q57 44 60 58 Q62 78 50 88 Z" fill="#d4b5f7"/>
+            <circle cx="50" cy="42" r="4" fill="#fff" opacity="0.5"/>
+        </svg>`,
+        // Red tulip
+        `<svg viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 175 Q45 130 48 90" stroke="#3a8a4a" stroke-width="5" fill="none"/>
+            <ellipse cx="35" cy="150" rx="14" ry="6" fill="#5ac06a" transform="rotate(-30 35 150)"/>
+            <ellipse cx="65" cy="140" rx="13" ry="6" fill="#5ac06a" transform="rotate(25 65 140)"/>
+            <path d="M50 90 Q25 70 30 40 Q35 20 50 25 Q65 20 70 40 Q75 70 50 90 Z" fill="#e63946"/>
+            <path d="M50 90 Q30 75 33 50 Q37 32 50 35 Q63 32 67 50 Q70 75 50 90 Z" fill="#f06b8a"/>
+            <path d="M50 88 Q38 78 40 58 Q43 44 50 46 Q57 44 60 58 Q62 78 50 88 Z" fill="#ff8eb5"/>
+            <circle cx="50" cy="42" r="4" fill="#ffd966" opacity="0.8"/>
+        </svg>`,
+        // Sky blue tulip
+        `<svg viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 175 Q45 130 48 90" stroke="#3a8a4a" stroke-width="5" fill="none"/>
+            <ellipse cx="30" cy="145" rx="14" ry="6" fill="#5ac06a" transform="rotate(-30 30 145)"/>
+            <path d="M50 90 Q25 70 30 40 Q35 20 50 25 Q65 20 70 40 Q75 70 50 90 Z" fill="#6bb8f0"/>
+            <path d="M50 90 Q30 75 33 50 Q37 32 50 35 Q63 32 67 50 Q70 75 50 90 Z" fill="#a3d8f4"/>
+            <path d="M50 88 Q38 78 40 58 Q43 44 50 46 Q57 44 60 58 Q62 78 50 88 Z" fill="#c8e8f8"/>
+            <circle cx="50" cy="42" r="4" fill="#ff8eb5" opacity="0.7"/>
+        </svg>`
+    ];
+
+    // Insert tulips into garden
+    const garden = document.getElementById('tulipGarden');
+    const positions = [
+        {top: '6%',  left: '2%'},
+        {top: '68%', left: '90%'},
+        {top: '42%', left: '8%'},
+        {top: '14%', left: '82%'},
+        {top: '88%', left: '18%'},
+        {top: '52%', left: '94%'},
+        {top: '3%',  left: '48%'},
+        {top: '92%', left: '62%'},
+        {top: '30%', left: '32%'},
+        {top: '78%', left: '40%'}
+    ];
+    positions.forEach((pos, i) => {
+        const div = document.createElement('div');
+        div.className = 'tulip-svg';
+        div.style.top = pos.top;
+        div.style.left = pos.left;
+        div.innerHTML = tulipSVGs[i % tulipSVGs.length];
+        garden.appendChild(div);
+    });
+
+    // ============ FLOATING PETALS ============
+    function createPetals() {
+        for (let i = 0; i < 14; i++) {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (8 + Math.random() * 8) + 's';
+            p.style.animationDelay = (-Math.random() * 10) + 's';
+            p.style.width = p.style.height = (8 + Math.random() * 12) + 'px';
+            p.style.opacity = 0.4 + Math.random() * 0.4;
+            document.body.appendChild(p);
+        }
+    }
+    createPetals();
+
+    // ============ DATA (350 words) ============
+    const categories = [
+        { id: 0, name: 'Үндсэн ойлголт, шалтгаан, үр дүн', emoji: '🧠' },
+        { id: 1, name: 'Үйл үгс', emoji: '⚡' },
+        { id: 2, name: 'Сургууль, ажил, карьер', emoji: '🎓' },
+        { id: 3, name: 'Нийгэм, амьдрал, харилцаа', emoji: '👥' },
+        { id: 4, name: 'Байгаль, эрүүл мэнд, технологи', emoji: '🌿' },
+        { id: 5, name: 'Сэтгэл, чанар, нөхцөл байдал', emoji: '💭' },
+        { id: 6, name: 'Холбоос, дайвар үг, хэллэг', emoji: '🔗' }
+    ];
+
+    const words1_50 = [
+        ["경험","кёнхом","туршлага"],["관심","квàншим","сонирхол"],["관계","квàнге","харилцаа"],["이유","ию","шалтгаан"],["방법","панбоп","арга"],
+        ["결과","кёльгва","үр дүн"],["과정","кважон","үйл явц"],["목적","мокчок","зорилго"],["계획","кехвэк","төлөвлөгөө"],["준비","чүнби","бэлтгэл"],
+        ["선택","сонтэк","сонголт"],["결정","кёльжон","шийдвэр"],["변화","пёнхва","өөрчлөлт"],["발전","пальжон","хөгжил"],["증가","чынга","өсөлт"],
+        ["감소","камсо","бууралт"],["비교","пёгё","харьцуулалт"],["차이","ча-и","ялгаа"],["특징","тхыжинг","онцлог"],["장점","чангжом","давуу тал"],
+        ["단점","танжом","сул тал"],["필요","пхирё","хэрэгцээ"],["중요","чунъё","чухал байдал"],["문제점","мунжом","асуудал, доголдол"],["해결","хэгёль","шийдэл/шийдвэрлэлт"],
+        ["이용","июн","ашиглалт"],["사용","саён","хэрэглээ"],["확인","хвагин","шалгалт, баталгаажуулалт"],["설명","сольмён","тайлбар"],["소개","согэ","танилцуулга"],
+        ["원인","вонин","шалтгаан"],["영향","ёнхян","нөлөө"],["결과적으로","кёльгважогыро","үр дүнд нь"],["이유로","июро","...-ын шалтгаанаар"],["경우","кёнү","тохиолдол"],
+        ["상황","санхван","нөхцөл байдал"],["상태","санте","байдал, төлөв"],["내용","нэён","агуулга"],["의미","ыими","утга, ач холбогдол"],["부분","пубүн","хэсэг"],
+        ["전체","чончэ","бүхэл, нийт"],["정도","чондо","хэмжээ, түвшин"],["수준","сүжүн","түвшин"],["기준","кижүн","шалгуур"],["조건","чокон","нөхцөл"],
+        ["필요성","пхирёсон","шаардлага"],["가능성","канынсон","боломж"],["사실","сашиль","баримт, үнэн"],["의견","ыигён","санал, үзэл бодол"],["주장","чүжан","байр суурь, үзэл"]
+    ];
+    const words51_100 = [
+        ["결정하다","кёльжонхада","шийдэх"],["선택하다","сонтэкхада","сонгох"],["확인하다","хвагинхада","шалгах"],["해결하다","хэгёльхада","шийдвэрлэх"],["이용하다","июнхада","ашиглах"],
+        ["비교하다","пёгёхада","харьцуулах"],["설명하다","сольмёнхада","тайлбарлах"],["소개하다","согэхада","танилцуулах"],["신청하다","шинчонхада","хүсэлт гаргах"],["참석하다","чхамсокхада","оролцох"],
+        ["참여하다","чхамёхада","оролцох"],["발생하다","пальсэнхада","үүсэх"],["증가하다","чынгахада","нэмэгдэх"],["감소하다","камсохада","буурах"],["유지하다","южихада","хадгалах"],
+        ["관리하다","квàнрихада","удирдах, арчлах"],["포함하다","похамхада","багтаах"],["제외하다","че-вэхада","хасах"],["선택되다","сонтэкдвэда","сонгогдох"],["결정되다","кёльжондвэда","шийдэгдэх"],
+        ["이용되다","июндвэда","ашиглагдах"],["알려지다","альлёжида","олонд мэдэгдэх"],["나타나다","натанада","илрэх, гарч ирэх"],["사라지다","саражида","алга болох"],["늘다","ныльда","нэмэгдэх"],
+        ["줄다","чульда","багасах"],["늘리다","ныльрида","нэмэгдүүлэх"],["줄이다","чүрида","багасгах"],["바꾸다","паккуда","солих, өөрчлөх"],["바뀌다","пакквида","өөрчлөгдөх"],
+        ["계속하다","кэсокхада","үргэлжлүүлэх"],["중단하다","чүнданданхада","зогсоох"],["시작되다","шижакдвэда","эхлэх"],["끝나다","кыннада","дуусах"],["준비하다","чүнбихада","бэлтгэх"],
+        ["노력하다","норёкхада","хичээх"],["연습하다","ёнсыпхада","дадлага хийх"],["경험하다","кёнхомхада","туршлага хуримтлуулах"],["발견하다","пальгёнхада","олж илрүүлэх"],["조사하다","чосахада","судлах, шалгах"],
+        ["연구하다","ёнгухада","судалгаа хийх"],["개발하다","кэбальхада","хөгжүүлэх"],["개선하다","кэсонхада","сайжруулах"],["보호하다","похохада","хамгаалах"],["절약하다","чольякхада","хэмнэх"],
+        ["소비하다","собихада","хэрэглэх, зарцуулах"],["전달하다","чондальхада","дамжуулах"],["추천하다","чучонхада","санал болгох"],["신청하다","шинчонхада","бүртгүүлэх"],["취소하다","чхвисохада","цуцлах"]
+    ];
+    const words101_150 = [
+        ["전공","чонгон","мэргэжил"],["학과","хакква","тэнхим/мэргэжлийн салбар"],["학기","хакки","улирал"],["학점","хакчом","кредит/дүн"],["과제","кважэ","даалгавар"],
+        ["발표","пальпё","илтгэл/танилцуулга"],["시험","шихом","шалгалт"],["성적","сонжок","дүн"],["실력","шиллёк","чадвар"],["능력","ныннёк","чадвар"],
+        ["지식","чишик","мэдлэг"],["기술","кисыль","технологи/ур чадвар"],["경험","кёнхом","туршлага"],["교육","кёюк","боловсрол"],["졸업","чолоп","төгсөлт"],
+        ["입학","ипхак","элсэлт"],["취업","чхвиоп","ажилд орох"],["취직","чхвижик","ажилд орох"],["직장","чигжан","ажлын газар"],["직업","чигоп","мэргэжил"],
+        ["회사","хэса","компани"],["직원","чигвон","ажилтан"],["업무","омму","ажлын үүрэг"],["회의","хвеы","хурал"],["월급","вольгып","сарын цалин"],
+        ["급여","кыпё","цалин хөлс"],["면접","мёнжоп","ярилцлага"],["지원","чивон","өргөдөл гаргалт"],["모집","можип","элсүүлэлт"],["채용","чэхён","ажилд авах"],
+        ["경쟁","кёнжэн","өрсөлдөөн"],["기회","кихве","боломж"],["목표","мокпё","зорилго"],["성공","сонгон","амжилт"],["실패","шильпхэ","бүтэлгүйтэл"],
+        ["자신감","чашингам","өөртөө итгэх итгэл"],["책임","чэгим","хариуцлага"],["역할","ёкхаль","үүрэг"],["능숙하다","нынсухада","чадварлаг байх"],["부족하다","пужокхада","дутагдалтай байх"],
+        ["익숙하다","иксухада","дассан байх"],["효과적이다","хёгважоги-да","үр дүнтэй байх"],["적극적이다","чогыкчоги-да","идэвхтэй байх"],["전문적이다","чонмунжоги-да","мэргэжлийн байх"],["유리하다","юрихада","ашигтай байх"],
+        ["불리하다","пуллихада","ашиггүй/тааламжгүй байх"],["중요하다","чунъёхада","чухал байх"],["필요하다","пхирёхада","шаардлагатай байх"],["가능하다","канынхада","боломжтой байх"],["불가능하다","пульганынхада","боломжгүй байх"]
+    ];
+    const words151_200 = [
+        ["사회","сахве","нийгэм"],["문화","мунхва","соёл"],["생활","сэнхваль","амьдрал"],["환경","хёнгён","орчин"],["지역","чигёк","бүс нутаг"],
+        ["주민","чумин","оршин суугч"],["행사","хэнса","арга хэмжээ"],["활동","хвалдон","үйл ажиллагаа"],["정보","чонбо","мэдээлэл"],["서비스","собисы","үйлчилгээ"],
+        ["시설","шисоль","байгууламж"],["교통","кётхон","тээвэр"],["안전","анжон","аюулгүй байдал"],["사고","сакко","осол"],["소비","соби","хэрэглээ"],
+        ["생활비","сэнхвальби","амьжиргааны зардал"],["비용","пиён","зардал"],["가격","кагёк","үнэ"],["경제","кёнжэ","эдийн засаг"],["직업","чигоп","ажил мэргэжил"],
+        ["가족","кажок","гэр бүл"],["부모","пумо","эцэг эх"],["자녀","чанё","үр хүүхэд"],["세대","сэ-дэ","үе, үеийнхэн"],["관계","квàнге","харилцаа"],
+        ["인간관계","ингангванге","хүмүүс хоорондын харилцаа"],["대화","тэхва","яриа"],["의견","ыигён","санал бодол"],["약속","яксок","амлалт/тохиролцоо"],["습관","сыпкван","дадал"],
+        ["태도","тхэдо","хандлага"],["행동","хэндон","үйлдэл"],["성격","сонгёк","зан чанар"],["성인","сонъин","насанд хүрсэн хүн"],["청소년","чонсонён","өсвөр насныхан"],
+        ["어린이","орини","хүүхэд"],["외국인","вэгүгин","гадаадын иргэн"],["이웃","иут","хөрш"],["고객","когэк","үйлчлүүлэгч"],["손님","сонним","зочин/үйлчлүүлэгч"],
+        ["회원","хве-вон","гишүүн"],["시민","шимин","иргэн"],["관광객","квàнвангэк","жуулчин"],["여행객","ёхэнгэк","аялагч"],["방문객","панмунгэк","зочин/айлчин"],
+        ["장소","чансо","газар"],["지역사회","чигёксахве","орон нутгийн нийгэм"],["공동체","гонгдонче","хамтын нийгэмлэг"],["질서","чильсо","дэг журам"],["규칙","кючик","дүрэм"]
+    ];
+    const words201_250 = [
+        ["자연","чаюон","байгаль"],["환경","хёнгён","хүрээлэн буй орчин"],["오염","оём","бохирдол"],["쓰레기","ссыриги","хог хаягдал"],["재활용","чэхвальён","дахин боловсруулах"],
+        ["에너지","эножи","эрчим хүч"],["전기","чонги","цахилгаан"],["자원","чавон","нөөц"],["기후","киху","уур амьсгал"],["기온","кион","агаарын температур"],
+        ["온도","ондо","температур"],["날씨","нальши","цаг агаар"],["비","пи","бороо"],["폭우","пхогу","аадар бороо"],["태풍","тхэпхүн","хар салхи"],
+        ["홍수","хонсу","үер"],["가뭄","камум","ган"],["건강","конган","эрүүл мэнд"],["질병","чильбён","өвчин"],["증상","чынсан","шинж тэмдэг"],
+        ["치료","чхирё","эмчилгээ"],["예방","ебан","урьдчилан сэргийлэлт"],["운동","ун-дон","дасгал хөдөлгөөн"],["식습관","шиксыпкван","хооллох дадал"],["스트레스","сытырэс","стресс"],
+        ["피로","пиро","ядаргаа"],["휴식","хюшик","амралт"],["수면","сумён","нойр"],["병원","пёнвон","эмнэлэг"],["의사","ыса","эмч"],
+        ["약","як","эм"],["치료하다","чхирёхада","эмчлэх"],["예방하다","ебанхада","урьдчилан сэргийлэх"],["회복하다","хвебокхада","эдгэрэх"],["건강하다","конганхада","эрүүл байх"],
+        ["기술","кисыль","технологи"],["인터넷","интэрнэт","интернэт"],["정보","чонбо","мэдээлэл"],["자료","чарё","материал/өгөгдөл"],["프로그램","пырограмм","програм"],
+        ["기기","ки-ги","төхөөрөмж"],["장치","чанчи","төхөөрөмж/аппарат"],["화면","хвамён","дэлгэц"],["파일","пхаиль","файл"],["저장","чожан","хадгалалт"],
+        ["검색","комсэк","хайлт"],["연결","ёнгёль","холболт"],["접속","чопсок","холбогдох/нэвтрэх"],["다운로드","таунлодхы","татаж авах"],["업로드","оплодхы","байршуулах"]
+    ];
+    const words251_300 = [
+        ["만족","манжок","сэтгэл ханамж"],["불만","пульман","сэтгэл дундуур байдал"],["걱정","кокчон","санаа зовнил"],["부담","пудам","дарамт"],["기대","кидэ","хүлээлт"],
+        ["실망","шильман","урам хугаралт"],["자신감","чашингам","өөртөө итгэх итгэл"],["실수","шильсу","алдаа"],["노력","норёк","хичээл зүтгэл"],["습관","сыпкван","дадал"],
+        ["태도","тхэдо","хандлага"],["행동","хэндон","үйлдэл"],["성격","сонгёк","зан чанар"],["감정","камжон","сэтгэл хөдлөл"],["기분","кипүн","сэтгэл санаа"],
+        ["관심사","квàншимса","сонирхдог зүйл"],["만족스럽다","манжоксыропта","сэтгэл хангалуун"],["불편하다","пульпёнхада","тухгүй байх"],["편리하다","пённихада","тохиромжтой"],["복잡하다","покчапхада","төвөгтэй"],
+        ["간단하다","канданхада","энгийн"],["정확하다","чонхвакахада","нарийвчлалтай"],["비슷하다","писытхада","төстэй"],["다르다","тарүда","өөр"],["특별하다","тхыбёльхада","онцгой"],
+        ["일반적이다","ильбанжоги-да","ерөнхий"],["다양하다","таянхада","олон янз"],["편하다","пёнхада","тухтай"],["불편하다","пульпёнхада","тухгүй"],["위험하다","вихомхада","аюултай"],
+        ["안전하다","анжонхада","аюулгүй"],["조용하다","чоёнхада","чимээгүй"],["시끄럽다","шигкыропта","чимээтэй"],["유명하다","ю-мёнхада","алдартай"],["필요없다","пхирёопта","шаардлагагүй"],
+        ["충분하다","чүнбунхада","хангалттай"],["부족하다","пужокхада","дутагдалтай"],["적절하다","чокчольхада","тохиромжтой"],["정확히","чонхваки","нарийвчлан"],["특히","тхыки","ялангуяа"],
+        ["실제로","шильжэро","үнэндээ/бодитоор"],["주로","чуро","голчлон"],["보통","потхон","ихэвчлэн"],["거의","кого","бараг"],["반드시","пандыши","заавал"],
+        ["직접","чикчоп","шууд/өөрөө"],["서로","сорo","бие биедээ"],["함께","хамккэ","хамт"],["따로","ттаро","тусад нь"],["갑자기","капчаги","гэнэт"]
+    ];
+    const words301_350 = [
+        ["그래서","кырэсо","тиймээс"],["그러나","кырона","гэвч/гэхдээ"],["하지만","хажиман","гэхдээ"],["그런데","кыронде","тэгэхдээ/гэхдээ"],["그러므로","кыромуро","тийм учраас"],
+        ["따라서","ттарасо","тиймээс/үүний дагуу"],["그러면","кыромён","тэгвэл"],["그렇지만","кырочиман","гэвч"],["또한","ттохан","мөн түүнчлэн"],["특히","тхыки","ялангуяа"],
+        ["예를 들어","ерыль тыльо","жишээлбэл"],["먼저","монжо","эхлээд"],["다음으로","таымыро","дараа нь"],["마지막으로","маджимагыро","эцэст нь"],["결국","кёльгук","эцэст нь"],
+        ["사실은","саширын","үнэндээ"],["물론","мурон","мэдээж"],["아마","ама","магадгүй"],["혹시","хокши","магадгүй/хэрэв"],["아직","ажик","хараахан"],
+        ["이미","ими","аль хэдийн"],["계속","кэсок","үргэлжлүүлэн"],["다시","таши","дахин"],["미리","мири","урьдчилан"],["함께","хамккэ","хамт"],
+        ["따로","ттаро","тусад нь"],["서로","сорo","бие биедээ"],["거의","кого","бараг"],["전혀","чонхё","огт"],["별로","пёльло","нэг их"],
+        ["매우","мэү","маш"],["상당히","сангданхи","нэлээд"],["너무나","номүна","маш их"],["점점","чомчом","аажмаар"],["점차","чомча","аажмаар"],
+        ["더욱","то-үк","бүр илүү"],["가장","кажан","хамгийн"],["직접적으로","чикчопчогыро","шууд байдлаар"],["일반적으로","ильбанжогыро","ерөнхийдөө"],["기본적으로","кипунжогыро","үндсэндээ"],
+        ["구체적으로","кучэжогыро","тодорхойгоор"],["적극적으로","чогыкчогыро","идэвхтэйгээр"],["효과적으로","хёгважогыро","үр дүнтэйгээр"],["자연스럽게","чаюонсыропкэ","байгалийн байдлаар"],["정확하게","чонхвакахэ","нарийн/зөвөөр"],
+        ["간단히","канданхи","товчхон"],["자세히","часэхи","дэлгэрэнгүй"],["특히나","тхыкина","ялангуяа"],["반면에","панмёнэ","харин/нөгөө талаас"],["뿐만 아니라","пунман анира","зөвхөн ... биш, мөн"]
+    ];
+
+    const allWords = [...words1_50, ...words51_100, ...words101_150, ...words151_200, ...words201_250, ...words251_300, ...words301_350];
+    const categoryWordIndices = [[0,49],[50,99],[100,149],[150,199],[200,249],[250,299],[300,349]];
+    const encouragements = [
+        "Сайн байна, цээжилж дуусаад хоолоо сайн идээрэй! 🍜",
+        "Хурдан сурч байна шүү, мундаг! ⭐",
+        "Гайхалтай! Үргэлжлүүлээрэй! 🌸",
+        "Чи чаднаа! 💪",
+        "Маш сайн! 🌺",
+    ];
+
+    let currentCategory = 0, currentLesson = 0, currentFlashcardIndex = 0;
+    let currentLessonWords = [], quizQuestions = [], quizAnswers = [], quizIndex = 0;
+
+    const homeScreen = document.getElementById('homeScreen');
+    const lessonListScreen = document.getElementById('lessonListScreen');
+    const flashcardScreen = document.getElementById('flashcardScreen');
+    const quizScreen = document.getElementById('quizScreen');
+    const categoryGrid = document.getElementById('categoryGrid');
+    const categoryTitle = document.getElementById('categoryTitle');
+    const lessonListDiv = document.getElementById('lessonList');
+    const fcKorean = document.getElementById('fcKorean');
+    const fcPron = document.getElementById('fcPron');
+    const fcMeaning = document.getElementById('fcMeaning');
+    const progressBadge = document.getElementById('progressBadge');
+    const encouragementBox = document.getElementById('encouragementBox');
+    const quizContent = document.getElementById('quizContent');
+
+    function init() {
+        categoryGrid.innerHTML = categories.map((cat, idx) => `
+            <div class="cat-card" onclick="selectCategory(${idx})">
+                <span class="cat-emoji">${cat.emoji}</span>
+                <span>${cat.name}</span>
+            </div>
+        `).join('');
+        showHome();
+    }
+
+    function showHome() { switchScreen('homeScreen'); }
+
+    function selectCategory(catIdx) {
+        currentCategory = catIdx;
+        categoryTitle.textContent = `${categories[catIdx].emoji} ${categories[catIdx].name}`;
+        renderLessonList(catIdx);
+        switchScreen('lessonListScreen');
+    }
+
+    function renderLessonList(catIdx) {
+        let html = '';
+        for (let lesson = 0; lesson < 5; lesson++) {
+            html += `
+                <div class="lesson-item" onclick="startLesson(${catIdx}, ${lesson})">
+                    <span class="tulip-icon">🌷</span>
+                    <span>L${lesson + 1}</span>
+                    <span style="font-size: 0.9rem; margin-left: auto; opacity: 0.7;">10 үг</span>
+                </div>`;
+        }
+        lessonListDiv.innerHTML = html;
+    }
+
+    function startLesson(catIdx, lessonIdx) {
+        currentCategory = catIdx;
+        currentLesson = lessonIdx;
+        const start = categoryWordIndices[catIdx][0] + lessonIdx * 10;
+        currentLessonWords = allWords.slice(start, start + 10);
+        currentFlashcardIndex = 0;
+        renderFlashcard();
+        switchScreen('flashcardScreen');
+    }
+
+    function renderFlashcard() {
+        const word = currentLessonWords[currentFlashcardIndex];
+        if (!word) return;
+        fcKorean.textContent = word[0];
+        fcPron.textContent = word[1];
+        fcMeaning.textContent = word[2];
+        progressBadge.textContent = `${currentFlashcardIndex + 1} / 10`;
+
+        if ((currentFlashcardIndex + 1) % 3 === 0 && currentFlashcardIndex !== 0) {
+            encouragementBox.style.display = 'inline-block';
+            encouragementBox.textContent = encouragements[Math.floor(Math.random() * encouragements.length)];
+        } else {
+            encouragementBox.style.display = 'none';
+        }
+        document.getElementById('prevBtn').disabled = currentFlashcardIndex === 0;
+        document.getElementById('nextBtn').textContent = currentFlashcardIndex === 9 ? 'Дуусгах' : 'Дараах →';
+    }
+
+    function nextCard() {
+        if (currentFlashcardIndex < 9) {
+            currentFlashcardIndex++;
+            renderFlashcard();
+        } else {
+            startQuiz();
+        }
+    }
+    function prevCard() {
+        if (currentFlashcardIndex > 0) { currentFlashcardIndex--; renderFlashcard(); }
+    }
+    function backToLessonList() { switchScreen('lessonListScreen'); }
+    function backToFlashcardsFromQuiz() { switchScreen('flashcardScreen'); renderFlashcard(); }
+
+    function startQuiz() {
+        quizQuestions = currentLessonWords.map(word => {
+            const correct = word[2];
+            const wrongPool = allWords.filter(w => w[2] !== correct).map(w => w[2]);
+            const shuffled = [...new Set(wrongPool)].sort(() => Math.random() - 0.5);
+            return {
+                korean: word[0],
+                correct: correct,
+                options: [correct, ...shuffled.slice(0, 3)].sort(() => Math.random() - 0.5)
+            };
+        });
+        quizIndex = 0;
+        quizAnswers = new Array(10).fill(null);
+        renderQuizQuestion();
+        switchScreen('quizScreen');
+    }
+
+    function renderQuizQuestion() {
+        if (quizIndex >= quizQuestions.length) { showQuizResult(); return; }
+        const q = quizQuestions[quizIndex];
+        const userAnswer = quizAnswers[quizIndex];
+        const optionsHtml = q.options.map((opt, idx) => {
+            let cls = 'option-btn';
+            if (userAnswer !== null) {
+                if (opt === q.correct) cls += ' correct';
+                else if (opt === userAnswer && userAnswer !== q.correct) cls += ' wrong';
+            }
+            return `<button class="${cls}" onclick="selectAnswer(${idx})" ${userAnswer !== null ? 'disabled' : ''}>${opt}</button>`;
+        }).join('');
+
+        quizContent.innerHTML = `
+            <div class="quiz-question">
+                <div class="quiz-korean">${q.korean}</div>
+                <div style="color: #7a2849; font-weight: 500;">дээрх үгийн монгол утгыг сонго</div>
+            </div>
+            <div class="options">${optionsHtml}</div>
+            <div style="text-align: center; margin-top: 10px;">
+                <span style="background:#ffe2ed; padding:6px 18px; border-radius:40px; font-weight:600;">${quizIndex + 1} / 10</span>
+            </div>
+            ${userAnswer !== null ? `<div style="text-align:center; margin-top:20px;"><button class="btn btn-primary" onclick="nextQuiz()">Дараах →</button></div>` : ''}`;
+    }
+
+    function selectAnswer(optIdx) {
+        const q = quizQuestions[quizIndex];
+        if (quizAnswers[quizIndex] !== null) return;
+        quizAnswers[quizIndex] = q.options[optIdx];
+        renderQuizQuestion();
+    }
+    function nextQuiz() {
+        if (quizIndex < 9) { quizIndex++; renderQuizQuestion(); }
+        else { showQuizResult(); }
+    }
+    function showQuizResult() {
+        const correctCount = quizAnswers.filter((ans, idx) => ans === quizQuestions[idx].correct).length;
+        let message;
+        if (correctCount <= 3) message = 'Дахин сайн цээжлээрэй';
+        else if (correctCount <= 7) message = 'Сайн байлаа, дахиад сайн хичээгээрэй';
+        else message = 'Үнэхээр сайн байлаа! Баяр хүргэе! 🌷';
+
+        quizContent.innerHTML = `
+            <div class="quiz-result">
+                <div class="score-big">${correctCount}/10</div>
+                <div class="result-message">${message}</div>
+                <button class="btn btn-primary" style="margin-top:24px;" onclick="startQuiz()">🔁 Дахин шалгах</button>
+                <button class="btn" style="margin-top:12px;" onclick="backToLessonList()">📚 Шинэ үг </button>
+            </div>`;
+    }
+    function switchScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+    window.onload = init;
+</script>
+</body>
+</html>
